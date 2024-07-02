@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start:dev": "nodemon --watch \"src\" --exec \"ts-node src/index.ts\" -e ts"
+    "start:dev": "nodemon --watch \"src\" --exec \"ts-node src/index.ts\" -e ts",
+    "prepare": "husky"
   },
   "keywords": [],
   "author": "",
