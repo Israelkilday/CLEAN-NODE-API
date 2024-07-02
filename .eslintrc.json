@@ -17,7 +17,5 @@
     "project": ["./tsconfig.json"]
   },
   "plugins": ["@typescript-eslint"],
-  "rules": {
-    // Suas regras personalizadas aqui
-  }
+  "rules": {}
 }
