@@ -1,3 +1,7 @@
 {
-  "*.ts?(x)": ["eslint --fix", "prettier --write", "npm run test:staged"]
+  "*.ts?(x)": [
+    "eslint --fix",
+    "prettier --write",
+    "jest --findRelatedTests --passWithNoTests"
+  ]
 }
