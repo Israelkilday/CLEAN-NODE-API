@@ -7,11 +7,12 @@
     "start": "node dist/index.js",
     "start:dev": "nodemon --watch \"src\" --exec \"ts-node -r tsconfig-paths/register src/index.ts\" -e ts",
     "prepare": "husky",
-    "test": "jest --passWithNoTests --silent --noStackTrace",
-    "test:verbose": "jest --passWithNoTests",
-    "test:unit": "npm test -- --watch",
-    "test:staged": "npm run test --findRelatedTests --passWithNoTests",
-    "test:push": "npm run test --coverage"
+    "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
+    "test:verbose": "jest --passWithNoTests --runInBand",
+    "test:unit": "npm test -- --watch -c jest-unit-config.js",
+    "test:integration": "npm test -- --watch -c jest-integration-config.js",
+    "test:staged": "npm test -- --findRelatedTests",
+    "test:push": "npm test -- --coverage"
   },
   "keywords": [],
   "author": "",
