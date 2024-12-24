@@ -1,4 +1,4 @@
-import { Collection, MongoClient } from "mongodb";
+import { Collection, MongoClient, Document } from "mongodb";
 
 export const MongoHelper = {
   client: null as MongoClient | null,
@@ -20,5 +20,10 @@ export const MongoHelper = {
       throw new Error("MongoClient is not connected");
     }
     return this.client.db().collection(name);
+  },
+
+  map<T extends { id: string }>(document: Document): T {
+    const { _id, ...rest } = document as { _id?: any; [key: string]: any };
+    return { ...rest, id: _id?.toString() } as T;
   },
 };
