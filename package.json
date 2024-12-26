@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc && tsc-alias",
-    "start": "node dist/index.js",
+    "start": "sucrase-node src/main/server.ts",
     "start:dev": "nodemon --watch \"src\" --exec \"ts-node -r tsconfig-paths/register src/index.ts\" -e ts",
     "prepare": "husky",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
@@ -36,6 +36,7 @@
     "mongodb-memory-server": "^10.1.2",
     "nodemon": "^3.1.4",
     "prettier": "^3.3.2",
+    "sucrase": "^3.35.0",
     "ts-jest": "^29.1.5",
     "ts-node": "^10.9.2",
     "tsc-alias": "^1.8.10",
