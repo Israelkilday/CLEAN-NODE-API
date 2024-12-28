@@ -1,6 +1,6 @@
 import request from "supertest";
 import app from "../config/app";
-import { MongoHelper } from "@/infra/db/mongodb/helpers/mongodb-helper";
+import { MongoHelper } from "../../infra/db/mongodb/helpers/mongodb-helper";
 
 describe("SignUp Routes", () => {
   beforeAll(async () => {
@@ -23,7 +23,7 @@ describe("SignUp Routes", () => {
         name: "Israel Kilday",
         email: "israelkilday@yahoo.com.br",
         password: "123",
-        passwordConfirmation: "132",
+        passwordConfirmation: "123",
       })
       .expect(200);
   });
