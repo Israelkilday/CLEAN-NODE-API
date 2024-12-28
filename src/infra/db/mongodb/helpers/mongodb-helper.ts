@@ -5,7 +5,8 @@ export const MongoHelper = {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async connect(uri: string): Promise<void> {
-    this.client = await MongoClient.connect(process.env.MONGO_URL!, {});
+    // this.client = await MongoClient.connect(process.env.MONGO_URL!, {});
+    this.client = await MongoClient.connect(uri, {});
   },
 
   async disconnect(): Promise<void> {
