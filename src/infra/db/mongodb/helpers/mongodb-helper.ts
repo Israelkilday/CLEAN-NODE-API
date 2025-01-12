@@ -2,10 +2,10 @@ import { Collection, MongoClient, Document } from "mongodb";
 
 export const MongoHelper = {
   client: null as MongoClient | null,
+  uri: null as string | null,
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async connect(uri: string): Promise<void> {
-    // this.client = await MongoClient.connect(process.env.MONGO_URL!, {});
+    this.uri = uri;
     this.client = await MongoClient.connect(uri, {});
   },
 
@@ -16,11 +16,15 @@ export const MongoHelper = {
     }
   },
 
-  getColection(name: string): Collection {
+  async getColection(name: string): Promise<Collection> {
     if (!this.client) {
-      throw new Error("MongoClient is not connected");
+      if (!this.uri) {
+        throw new Error("MongoClient is not connected");
+      }
+      await this.connect(this.uri);
     }
-    return this.client.db().collection(name);
+
+    return this.client!.db().collection(name);
   },
 
   map<T extends { id: string }>(document: Document): T {
