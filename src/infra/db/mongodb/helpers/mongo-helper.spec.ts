@@ -5,10 +5,11 @@ describe("Mongo Helper", () => {
     const mongoUrl =
       process.env.MONGO_URL ?? "mongodb://localhost:27017/clean-node-api";
     await sut.connect(mongoUrl);
-    // await sut.connect(process.env.MONGO_URL);
   });
 
-  afterAll(async () => {});
+  afterAll(async () => {
+    await sut.disconnect();
+  });
 
   test("Should reconect mongodb s down", async () => {
     let accountCollection = await sut.getColection("accounts");
