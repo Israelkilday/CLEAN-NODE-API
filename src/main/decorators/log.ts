@@ -6,16 +6,16 @@ import {
 } from "@/presentation/protocols";
 
 export class LogControllerDecorator implements Controller {
-  private readonly controler: Controller;
+  private readonly controller: Controller;
   private readonly logErrorRepository: LogErrorRepository;
 
-  constructor(controler: Controller, logErrorRepository: LogErrorRepository) {
-    this.controler = controler;
+  constructor(controller: Controller, logErrorRepository: LogErrorRepository) {
+    this.controller = controller;
     this.logErrorRepository = logErrorRepository;
   }
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-    const httpResponse = await this.controler.handle(httpRequest);
+    const httpResponse = await this.controller.handle(httpRequest);
 
     if (httpResponse.statusCode === 500) {
       await this.logErrorRepository.log(httpResponse.body.stack);
