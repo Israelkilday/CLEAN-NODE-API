@@ -1,0 +1,30 @@
+import { Collection } from "mongodb";
+import { MongoHelper } from "../helpers/mongodb-helper";
+import { logMongoRepository } from "./log";
+
+describe("log Mongo Repository", () => {
+  let errorCollection: Collection;
+
+  beforeAll(async () => {
+    await MongoHelper.connect(process.env.MONGO_URL!);
+  });
+
+  afterAll(async () => {
+    await MongoHelper.disconnect();
+  });
+
+  beforeEach(async () => {
+    errorCollection = await MongoHelper.getColection("errors");
+    await errorCollection.deleteMany({});
+  });
+
+  test("Should create an error log on success", async () => {
+    const sut = new logMongoRepository();
+
+    await sut.logError("any_error");
+
+    const count = await errorCollection.countDocuments();
+
+    expect(count).toBe(1);
+  });
+});
