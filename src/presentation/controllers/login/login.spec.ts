@@ -2,6 +2,7 @@ import { badRequest, serverError } from "@/presentation/helpers/http-helper";
 import { LoginController } from "./login";
 import { InvalidParamError, MissingParamError } from "@/presentation/errors";
 import { EmailValidator, HttpRequest } from "../signup/signup-protocols";
+import { Authentication } from "@/domain/use-cases/authentication";
 
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
@@ -10,28 +11,41 @@ const makeEmailValidator = (): EmailValidator => {
       return true;
     }
   }
-
   return new EmailValidatorStub();
+};
+
+const makeAuthentication = (): Authentication => {
+  class AuthenticationStub implements Authentication {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    async auth(email: string, password: string): Promise<string> {
+      return new Promise((resolve) => resolve("any_token"));
+    }
+  }
+
+  return new AuthenticationStub();
 };
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
     email: "any_@email.com",
-    password: "any_passowrd",
+    password: "any_password",
   },
 });
 
 interface SutTypes {
   sut: LoginController;
   emailValidatorStub: EmailValidator;
+  authenticationStub: Authentication;
 }
 
 const makeSut = (): SutTypes => {
   const emailValidatorStub = makeEmailValidator();
-  const sut = new LoginController(emailValidatorStub);
+  const authenticationStub = makeAuthentication();
+  const sut = new LoginController(emailValidatorStub, authenticationStub);
   return {
     sut,
     emailValidatorStub,
+    authenticationStub,
   };
 };
 
@@ -89,5 +103,14 @@ describe("Login Controller", () => {
     const httpResponse = await sut.handle(makeFakeRequest());
 
     expect(httpResponse).toEqual(serverError(new Error()));
+  });
+
+  test("Should call Authentication with correct values", async () => {
+    const { sut, authenticationStub } = makeSut();
+    const AuthSpy = jest.spyOn(authenticationStub, "auth");
+
+    await sut.handle(makeFakeRequest());
+
+    expect(AuthSpy).toHaveBeenCalledWith("any_@email.com", "any_password");
   });
 });
