@@ -117,7 +117,7 @@ describe("Login Controller", () => {
     expect(AuthSpy).toHaveBeenCalledWith("any_@email.com", "any_password");
   });
 
-  test("Should return 500 if EmailValidator throws", async () => {
+  test("Should return 401 if invalid credentials are provided", async () => {
     const { sut, authenticationStub } = makeSut();
     jest
       .spyOn(authenticationStub, "auth")
@@ -126,5 +126,18 @@ describe("Login Controller", () => {
     const httpResponse = await sut.handle(makeFakeRequest());
 
     expect(httpResponse).toEqual(unauthorized());
+  });
+
+  test("Should return 500 if EmailValidator throws", async () => {
+    const { sut, authenticationStub } = makeSut();
+    jest
+      .spyOn(authenticationStub, "auth")
+      .mockReturnValueOnce(
+        new Promise((resolve, reject) => reject(new Error())),
+      );
+
+    const httpResponse = await sut.handle(makeFakeRequest());
+
+    expect(httpResponse).toEqual(serverError(new Error()));
   });
 });
